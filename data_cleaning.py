@@ -4,6 +4,7 @@ Delete all message heads, and removed all noisy text including meaningless file 
 '''
 
 import pandas as pd
+import re
 
 train = pd.read_csv('emails.csv')
 
@@ -20,7 +21,9 @@ i=0
 list1 = []
 for value in train['message']:
     element = value[msg[i]+24:].replace('-','').replace('-Privileged).pst','').replace('>','').replace('Privileged).pst','').replace('\n','').replace('  ','').strip('\"')
-    list1.append(element)
+    text = re.sub(r'[^A-Za-z. ]', '', element)
+    text = text.lower()
+    list1.append(text)
     i += 1
 
 # Create msg column and drop old columns
@@ -28,4 +31,4 @@ train['msg'] = list1
 train = train.drop(columns=['file','message','index'])
 
 # Create a new .csv file from train dataframe
-train.to_csv('msg.csv')
+train.to_csv('text.csv')
